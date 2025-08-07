@@ -1,56 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <!-- 
-      This is an HTML comment
-      You can write text in a comment and the content won't be visible in the page
-    -->
-
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="icon" href="https://glitch.com/favicon.ico" />
-
-  <!--
-      This is the page head - it contains info the browser uses
-      Like the title, which appears on the browser tab but not inside the page
-      Further down you'll see the content that displays in the page
-    -->
-  <title>Hello World!</title>
-
-  <!-- The website stylesheet -->
+  <link rel="icon" href="https://tripbookar.com/favicon.ico" />
+  <title>TripBookar India - Book Hotels, Flights, Holidays & More</title>
   <link rel="stylesheet" href="/style.css" />
-
-  <!-- The website JavaScript file -->
-  <script src="/script.js" defer></script>
+  <script src="/public/script.js" defer></script>
+  <style>
+    .hero { background: linear-gradient(120deg, #33b1ff 60%, #e7f7fe 100%); padding: 3rem 1rem 2rem 1rem; text-align: center; }
+    .hero h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+    .search-bar { max-width: 600px; margin: 1.5rem auto; display: flex; gap: 0.5rem; }
+    .search-bar input, .search-bar select { flex: 1; padding: 0.7rem; border-radius: 5px; border: 1px solid #33b1ff; }
+    .search-bar button { padding: 0.7rem 1.5rem; background: #006aff; color: #fff; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
+    .section { padding: 2.5rem 1rem 1.5rem 1rem; max-width: 1200px; margin: 0 auto; }
+    .section-title { font-size: 2rem; margin-bottom: 1.2rem; color: #006aff; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.2rem; }
+    .card { background: #fff; border-radius: 10px; box-shadow: 0 2px 8px #0001; padding: 1rem; text-align: center; transition: transform 0.2s; }
+    .card:hover { transform: translateY(-5px) scale(1.03); }
+    .hotel-list { display: flex; flex-wrap: wrap; gap: 1.2rem; justify-content: center; }
+    .hotel-card { background: #fff; border-radius: 10px; box-shadow: 0 2px 8px #0001; padding: 1rem 1.5rem; min-width: 220px; text-align: left; }
+    .flight-section { background: #e7f7fe; border-radius: 10px; padding: 2rem 1rem; margin-top: 2rem; }
+    .footer { margin-top: 2rem; text-align: center; color: #004099; font-size: 1rem; }
+    @media (max-width: 600px) { .section-title { font-size: 1.3rem; } .hero h1 { font-size: 1.5rem; } }
+  </style>
 </head>
-
 <body>
-  <!--
-      The body includes the content you see in the page
-      Each element is defined using tags, like this <div></div>
-      The attributes like class="wrapper" let us style elements in the CSS
-    -->
-  <div class="wrapper">
-    <div class="content" role="main">
-      <h1 class="title">Oh hi website!</h1>
-      <img src="/cool-website.svg" class="illustration" alt="cool website" />
-      <div class="instructions">
-        <p>
-          Fork <a href="https://github.com/glitchdotcom/website-to-compute">this project</a> and open it in a GitHub Codespace.
-        </p>
-        <p> Follow the steps in the README to deploy your new website to Fastly in a few steps!
-        </p>
+  <div class="hero">
+    <h1>TripBookar India</h1>
+    <p>Book Hotels, Flights, Holidays & More - Best Deals for Top Indian Destinations</p>
+    <form class="search-bar">
+      <input type="text" placeholder="Search destination, hotel, or package..." aria-label="Search" />
+      <select>
+        <option>Hotels</option>
+        <option>Flights</option>
+        <option>Packages</option>
+      </select>
+      <button type="submit">Search</button>
+    </form>
+  </div>
 
-      </div>
-
-      <footer class="footer">
-        <div>
-          <a class="remix" href="https://github.com/glitchdotcom/website-to-compute">🚧 Get your own site</a>
-        </div>
-      </footer>
+  <div class="section">
+    <div class="section-title">Top 20 Destinations in India</div>
+    <div class="grid">
+      <div class="card">Goa</div>
+      <div class="card">Jaipur</div>
+      <div class="card">Agra</div>
+      <div class="card">Kerala</div>
+      <div class="card">Delhi</div>
+      <div class="card">Mumbai</div>
+      <div class="card">Bangalore</div>
+      <div class="card">Udaipur</div>
+      <div class="card">Varanasi</div>
+      <div class="card">Rishikesh</div>
+      <div class="card">Shimla</div>
+      <div class="card">Manali</div>
+      <div class="card">Pune</div>
+      <div class="card">Chennai</div>
+      <div class="card">Kolkata</div>
+      <div class="card">Hyderabad</div>
+      <div class="card">Amritsar</div>
+      <div class="card">Darjeeling</div>
+      <div class="card">Ooty</div>
+      <div class="card">Mysore</div>
     </div>
   </div>
-</body>
 
+  <div class="section" style="background:#f8fbff; border-radius:10px;">
+    <div class="section-title">Popular Holiday Packages</div>
+    <div class="grid">
+      <div class="card">Goa Beach Escape - 5N/6D</div>
+      <div class="card">Golden Triangle (Delhi-Agra-Jaipur) - 6N/7D</div>
+      <div class="card">Kerala Backwaters - 4N/5D</div>
+      <div class="card">Himalayan Adventure - 7N/8D</div>
+      <div class="card">Rajasthan Royal Tour - 8N/9D</div>
+      <div class="card">Andaman Islands - 5N/6D</div>
+      <div class="card">Kashmir Paradise - 6N/7D</div>
+      <div class="card">Sikkim & Darjeeling - 6N/7D</div>
+      <div class="card">South India Temple Tour - 7N/8D</div>
+      <div class="card">Leh-Ladakh Road Trip - 8N/9D</div>
+      <div class="card">Wildlife Safari (Kanha/Bandhavgarh) - 4N/5D</div>
+      <div class="card">Rann of Kutch Festival - 3N/4D</div>
+      <div class="card">Ooty & Kodaikanal - 5N/6D</div>
+      <div class="card">Pune to Mahabaleshwar - 2N/3D</div>
+      <div class="card">Hyderabad Heritage - 3N/4D</div>
+      <div class="card">Chennai to Pondicherry - 2N/3D</div>
+      <div class="card">Bangalore to Coorg - 3N/4D</div>
+      <div class="card">Kolkata Sundarbans - 3N/4D</div>
+      <div class="card">Amritsar & Wagah Border - 2N/3D</div>
+      <div class="card">Mumbai to Lonavala - 2N/3D</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Top 10 5-Star Hotel Brands in India</div>
+    <div class="hotel-list">
+      <div class="hotel-card"><b>Taj Hotels</b><br><small>Mumbai, Delhi, Goa, Jaipur, Udaipur, Chennai</small></div>
+      <div class="hotel-card"><b>Oberoi Hotels</b><br><small>Delhi, Mumbai, Udaipur, Jaipur, Agra, Bengaluru</small></div>
+      <div class="hotel-card"><b>ITC Hotels</b><br><small>Kolkata, Hyderabad, Chennai, Bengaluru, Agra</small></div>
+      <div class="hotel-card"><b>Leela Palaces</b><br><small>Delhi, Bengaluru, Udaipur, Chennai, Goa</small></div>
+      <div class="hotel-card"><b>JW Marriott</b><br><small>Mumbai, Pune, Delhi, Bengaluru, Kolkata</small></div>
+      <div class="hotel-card"><b>Hyatt Hotels</b><br><small>Delhi, Mumbai, Pune, Goa, Ahmedabad</small></div>
+      <div class="hotel-card"><b>Radisson Blu</b><br><small>Delhi, Agra, Chennai, Hyderabad, Jaipur</small></div>
+      <div class="hotel-card"><b>Trident Hotels</b><br><small>Mumbai, Gurgaon, Jaipur, Udaipur, Chennai</small></div>
+      <div class="hotel-card"><b>Vivanta</b><br><small>Goa, Bengaluru, Delhi, Hyderabad, Guwahati</small></div>
+      <div class="hotel-card"><b>Grand Hyatt</b><br><small>Mumbai, Kochi, Goa</small></div>
+    </div>
+  </div>
+
+  <div class="section flight-section">
+    <div class="section-title">Book Flights Across India</div>
+    <form class="search-bar" style="max-width:500px;">
+      <input type="text" placeholder="From (City/Airport)" aria-label="From" />
+      <input type="text" placeholder="To (City/Airport)" aria-label="To" />
+      <input type="date" aria-label="Departure Date" />
+      <button type="submit">Search Flights</button>
+    </form>
+    <div style="margin-top:1.5rem;">
+      <b>Popular Routes:</b>
+      <span style="margin-left:0.5rem;">Delhi ↔ Mumbai</span> |
+      <span>Chennai ↔ Bangalore</span> |
+      <span>Kolkata ↔ Hyderabad</span> |
+      <span>Goa ↔ Delhi</span>
+    </div>
+  </div>
+
+  <footer class="footer">
+    &copy; 2024 TripBookar.com | Inspired by MakeMyTrip | All Rights Reserved
+  </footer>
+</body>
 </html>
