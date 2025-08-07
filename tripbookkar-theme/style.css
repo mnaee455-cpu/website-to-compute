@@ -9,6 +9,9 @@ Text Domain: tripbookkar
 Tags: travel, booking, responsive, modern, tourism, hotels, flights
 */
 
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 /* Reset and Base Styles */
 * {
     margin: 0;
@@ -21,6 +24,7 @@ body {
     line-height: 1.6;
     color: #333;
     background-color: #f8f9fa;
+    padding-top: 80px; /* Add padding to account for fixed header */
 }
 
 .container {
@@ -60,6 +64,7 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 15px 0;
+    position: relative;
 }
 
 .site-logo {
@@ -115,19 +120,68 @@ body {
     width: 100%;
 }
 
+/* Menu Toggle */
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    position: relative;
+    z-index: 10001;
+}
+
+.hamburger {
+    display: flex;
+    flex-direction: column;
+    width: 25px;
+    height: 20px;
+    justify-content: space-between;
+}
+
+.hamburger span {
+    background: #333;
+    height: 3px;
+    width: 100%;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+.menu-toggle.active .hamburger span:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px);
+}
+
+.menu-toggle.active .hamburger span:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-toggle.active .hamburger span:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
+}
+
+.menu-text {
+    display: block;
+    margin-top: 5px;
+    font-size: 12px;
+    color: #333;
+}
+
+body.menu-open {
+    overflow: hidden;
+}
+
 /* Hero Section */
 .hero-section {
     background: linear-gradient(135deg, rgba(231, 76, 60, 0.8), rgba(52, 152, 219, 0.8)), url('assets/images/hero-bg.jpg');
     background-size: cover;
     background-position: center;
-    min-height: 100vh;
+    min-height: calc(100vh - 80px); /* Adjust height to account for header */
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     color: white;
     position: relative;
-    margin-top: 80px;
 }
 
 .hero-content h1 {
@@ -418,6 +472,10 @@ body {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    body {
+        padding-top: 70px; /* Adjust for smaller mobile header */
+    }
+    
     .hero-content h1 {
         font-size: 2.5rem;
     }
@@ -427,7 +485,31 @@ body {
     }
     
     .main-navigation {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         display: none;
+        z-index: 999;
+    }
+    
+    .main-navigation.active {
+        display: block;
+    }
+    
+    .main-navigation ul {
+        flex-direction: column;
+        padding: 20px;
+    }
+    
+    .main-navigation li {
+        margin: 10px 0;
+    }
+    
+    .menu-toggle {
+        display: block;
     }
     
     .destinations-grid,
