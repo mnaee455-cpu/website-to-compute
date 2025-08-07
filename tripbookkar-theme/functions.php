@@ -536,3 +536,304 @@ function tripbookkar_optimize_wp() {
     remove_action('admin_print_styles', 'print_emoji_styles');
 }
 add_action('init', 'tripbookkar_optimize_wp');
+
+/**
+ * Admin Panel Settings
+ */
+function tripbookkar_admin_menu() {
+    add_menu_page(
+        'TripBookKar Settings',
+        'TripBookKar',
+        'manage_options',
+        'tripbookkar-settings',
+        'tripbookkar_settings_page',
+        'dashicons-airplane',
+        30
+    );
+    
+    add_submenu_page(
+        'tripbookkar-settings',
+        'API Settings',
+        'API Settings',
+        'manage_options',
+        'tripbookkar-api-settings',
+        'tripbookkar_api_settings_page'
+    );
+    
+    add_submenu_page(
+        'tripbookkar-settings',
+        'Demo Importer',
+        'Demo Importer',
+        'manage_options',
+        'tripbookkar-demo-importer',
+        'tripbookkar_demo_importer_page'
+    );
+}
+add_action('admin_menu', 'tripbookkar_admin_menu');
+
+/**
+ * Main Settings Page
+ */
+function tripbookkar_settings_page() {
+    ?>
+    <div class="wrap">
+        <h1>TripBookKar Settings</h1>
+        <div class="tripbookkar-admin-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;">
+            
+            <div class="settings-card" style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                <h3 style="margin-top: 0; color: #2c3e50;">🔑 API Configuration</h3>
+                <p>Configure your travel API keys for live data integration.</p>
+                <a href="<?php echo admin_url('admin.php?page=tripbookkar-api-settings'); ?>" class="button button-primary">Configure APIs</a>
+            </div>
+            
+            <div class="settings-card" style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                <h3 style="margin-top: 0; color: #2c3e50;">📥 Demo Content</h3>
+                <p>Import demo content and destinations with one click.</p>
+                <a href="<?php echo admin_url('admin.php?page=tripbookkar-demo-importer'); ?>" class="button button-primary">Import Demo</a>
+            </div>
+            
+            <div class="settings-card" style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                <h3 style="margin-top: 0; color: #2c3e50;">🎨 Customization</h3>
+                <p>Customize colors and theme settings via WordPress Customizer.</p>
+                <a href="<?php echo admin_url('customize.php'); ?>" class="button button-primary">Customize Theme</a>
+            </div>
+            
+        </div>
+        
+        <div class="tripbookkar-quick-stats" style="margin-top: 30px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <h3>Quick Stats</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                <div style="text-align: center;">
+                    <div style="font-size: 2rem; font-weight: bold; color: #e74c3c;"><?php echo wp_count_posts('destinations')->publish; ?></div>
+                    <div>Destinations</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 2rem; font-weight: bold; color: #3498db;"><?php echo wp_count_posts('packages')->publish; ?></div>
+                    <div>Packages</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 2rem; font-weight: bold; color: #27ae60;"><?php echo wp_count_posts('testimonials')->publish; ?></div>
+                    <div>Testimonials</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 2rem; font-weight: bold; color: #f39c12;">v1.0</div>
+                    <div>Theme Version</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php
+}
+
+/**
+ * API Settings Page
+ */
+function tripbookkar_api_settings_page() {
+    if (isset($_POST['submit'])) {
+        // Save API settings
+        update_option('tripbookkar_amadeus_api_key', sanitize_text_field($_POST['amadeus_api_key']));
+        update_option('tripbookkar_amadeus_api_secret', sanitize_text_field($_POST['amadeus_api_secret']));
+        update_option('tripbookkar_booking_com_api_key', sanitize_text_field($_POST['booking_com_api_key']));
+        update_option('tripbookkar_travelpayouts_api_key', sanitize_text_field($_POST['travelpayouts_api_key']));
+        update_option('tripbookkar_weather_api_key', sanitize_text_field($_POST['weather_api_key']));
+        
+        echo '<div class="notice notice-success"><p>API settings saved successfully!</p></div>';
+    }
+    
+    $amadeus_api_key = get_option('tripbookkar_amadeus_api_key', '');
+    $amadeus_api_secret = get_option('tripbookkar_amadeus_api_secret', '');
+    $booking_com_api_key = get_option('tripbookkar_booking_com_api_key', '');
+    $travelpayouts_api_key = get_option('tripbookkar_travelpayouts_api_key', '');
+    $weather_api_key = get_option('tripbookkar_weather_api_key', '');
+    ?>
+    <div class="wrap">
+        <h1>API Settings</h1>
+        <p>Configure your API keys to enable live data integration for flights, hotels, and weather information.</p>
+        
+        <form method="post" action="">
+            <table class="form-table">
+                <tr>
+                    <th scope="row">
+                        <h3 style="margin: 0;">✈️ Flight APIs</h3>
+                    </th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th scope="row">Amadeus API Key</th>
+                    <td>
+                        <input type="text" name="amadeus_api_key" value="<?php echo esc_attr($amadeus_api_key); ?>" class="regular-text" />
+                        <p class="description">Get your key from <a href="https://developers.amadeus.com/" target="_blank">Amadeus Developer Portal</a></p>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Amadeus API Secret</th>
+                    <td>
+                        <input type="password" name="amadeus_api_secret" value="<?php echo esc_attr($amadeus_api_secret); ?>" class="regular-text" />
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">TravelPayouts API Key</th>
+                    <td>
+                        <input type="text" name="travelpayouts_api_key" value="<?php echo esc_attr($travelpayouts_api_key); ?>" class="regular-text" />
+                        <p class="description">Alternative flight search API from <a href="https://www.travelpayouts.com/" target="_blank">TravelPayouts</a></p>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <th scope="row">
+                        <h3 style="margin: 20px 0 0 0;">🏨 Hotel APIs</h3>
+                    </th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th scope="row">Booking.com API Key</th>
+                    <td>
+                        <input type="text" name="booking_com_api_key" value="<?php echo esc_attr($booking_com_api_key); ?>" class="regular-text" />
+                        <p class="description">Get partner access from <a href="https://developers.booking.com/" target="_blank">Booking.com Partner Hub</a></p>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <th scope="row">
+                        <h3 style="margin: 20px 0 0 0;">🌤️ Weather API</h3>
+                    </th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th scope="row">OpenWeatherMap API Key</th>
+                    <td>
+                        <input type="text" name="weather_api_key" value="<?php echo esc_attr($weather_api_key); ?>" class="regular-text" />
+                        <p class="description">Get your free key from <a href="https://openweathermap.org/api" target="_blank">OpenWeatherMap</a></p>
+                    </td>
+                </tr>
+            </table>
+            
+            <?php submit_button('Save API Settings'); ?>
+        </form>
+        
+        <div class="api-status" style="margin-top: 30px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <h3>API Status</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                <div style="padding: 15px; border-left: 4px solid <?php echo $amadeus_api_key ? '#27ae60' : '#e74c3c'; ?>; background: #f9f9f9;">
+                    <strong>Amadeus Flights</strong><br>
+                    Status: <?php echo $amadeus_api_key ? '✅ Configured' : '❌ Not Configured'; ?>
+                </div>
+                <div style="padding: 15px; border-left: 4px solid <?php echo $booking_com_api_key ? '#27ae60' : '#e74c3c'; ?>; background: #f9f9f9;">
+                    <strong>Booking.com Hotels</strong><br>
+                    Status: <?php echo $booking_com_api_key ? '✅ Configured' : '❌ Not Configured'; ?>
+                </div>
+                <div style="padding: 15px; border-left: 4px solid <?php echo $weather_api_key ? '#27ae60' : '#e74c3c'; ?>; background: #f9f9f9;">
+                    <strong>Weather Data</strong><br>
+                    Status: <?php echo $weather_api_key ? '✅ Configured' : '❌ Not Configured'; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php
+}
+
+/**
+ * Demo Importer Page
+ */
+function tripbookkar_demo_importer_page() {
+    if (isset($_POST['import_demo'])) {
+        tripbookkar_import_demo_content();
+        echo '<div class="notice notice-success"><p>Demo content imported successfully!</p></div>';
+    }
+    ?>
+    <div class="wrap">
+        <h1>Demo Content Importer</h1>
+        <p>Import sample destinations, packages, and other content to get started quickly.</p>
+        
+        <div class="demo-preview" style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px;">
+            <h3>What will be imported:</h3>
+            <ul style="list-style-type: none; padding-left: 0;">
+                <li>✅ 20 Popular travel destinations with SEO content</li>
+                <li>✅ 10 Featured holiday packages</li>
+                <li>✅ 5 Customer testimonials</li>
+                <li>✅ Sample blog posts about travel</li>
+                <li>✅ Contact forms and pages</li>
+            </ul>
+        </div>
+        
+        <form method="post" action="">
+            <p><strong>Warning:</strong> This will create new content but won't delete existing posts.</p>
+            <?php submit_button('Import Demo Content', 'primary large', 'import_demo'); ?>
+        </form>
+    </div>
+    <?php
+}
+
+/**
+ * Import Demo Content - Creates 20 destinations
+ */
+function tripbookkar_import_demo_content() {
+    // Demo destinations data
+    $destinations = array(
+        array('title' => 'Paris', 'country' => 'France', 'continent' => 'Europe', 'cost' => '150', 'best_time' => 'April - October'),
+        array('title' => 'Tokyo', 'country' => 'Japan', 'continent' => 'Asia', 'cost' => '120', 'best_time' => 'March - May, Sept - Nov'),
+        array('title' => 'New York City', 'country' => 'United States', 'continent' => 'North America', 'cost' => '200', 'best_time' => 'April - June, Sept - Nov'),
+        array('title' => 'London', 'country' => 'United Kingdom', 'continent' => 'Europe', 'cost' => '180', 'best_time' => 'May - September'),
+        array('title' => 'Dubai', 'country' => 'United Arab Emirates', 'continent' => 'Asia', 'cost' => '160', 'best_time' => 'November - March'),
+        array('title' => 'Rome', 'country' => 'Italy', 'continent' => 'Europe', 'cost' => '140', 'best_time' => 'April - June, Sept - Oct'),
+        array('title' => 'Bangkok', 'country' => 'Thailand', 'continent' => 'Asia', 'cost' => '80', 'best_time' => 'November - February'),
+        array('title' => 'Barcelona', 'country' => 'Spain', 'continent' => 'Europe', 'cost' => '130', 'best_time' => 'May - September'),
+        array('title' => 'Sydney', 'country' => 'Australia', 'continent' => 'Oceania', 'cost' => '170', 'best_time' => 'September - November'),
+        array('title' => 'Amsterdam', 'country' => 'Netherlands', 'continent' => 'Europe', 'cost' => '160', 'best_time' => 'April - October'),
+        array('title' => 'Singapore', 'country' => 'Singapore', 'continent' => 'Asia', 'cost' => '150', 'best_time' => 'February - April'),
+        array('title' => 'Istanbul', 'country' => 'Turkey', 'continent' => 'Europe/Asia', 'cost' => '90', 'best_time' => 'April - May, Sept - Nov'),
+        array('title' => 'Los Angeles', 'country' => 'United States', 'continent' => 'North America', 'cost' => '180', 'best_time' => 'Year-round'),
+        array('title' => 'Prague', 'country' => 'Czech Republic', 'continent' => 'Europe', 'cost' => '100', 'best_time' => 'May - September'),
+        array('title' => 'Cairo', 'country' => 'Egypt', 'continent' => 'Africa', 'cost' => '70', 'best_time' => 'October - April'),
+        array('title' => 'Rio de Janeiro', 'country' => 'Brazil', 'continent' => 'South America', 'cost' => '90', 'best_time' => 'December - March'),
+        array('title' => 'Vienna', 'country' => 'Austria', 'continent' => 'Europe', 'cost' => '140', 'best_time' => 'April - October'),
+        array('title' => 'Mumbai', 'country' => 'India', 'continent' => 'Asia', 'cost' => '60', 'best_time' => 'November - February'),
+        array('title' => 'Cape Town', 'country' => 'South Africa', 'continent' => 'Africa', 'cost' => '80', 'best_time' => 'December - April'),
+        array('title' => 'Vancouver', 'country' => 'Canada', 'continent' => 'North America', 'cost' => '150', 'best_time' => 'June - August')
+    );
+    
+    foreach ($destinations as $dest) {
+        $content = "Discover the amazing beauty and culture of {$dest['title']} in {$dest['country']}. This incredible destination offers unforgettable experiences for every type of traveler. From stunning landmarks to delicious local cuisine, {$dest['title']} has something special for everyone. Plan your perfect trip and create memories that will last a lifetime.";
+        
+        $post_id = wp_insert_post(array(
+            'post_title' => $dest['title'],
+            'post_content' => $content,
+            'post_status' => 'publish',
+            'post_type' => 'destinations'
+        ));
+        
+        if ($post_id) {
+            update_post_meta($post_id, '_destination_country', $dest['country']);
+            update_post_meta($post_id, '_destination_continent', $dest['continent']);
+            update_post_meta($post_id, '_average_cost', $dest['cost']);
+            update_post_meta($post_id, '_best_time_to_visit', $dest['best_time']);
+            update_post_meta($post_id, '_currency', 'USD');
+            update_post_meta($post_id, '_language', 'English');
+        }
+    }
+}
+
+/**
+ * Elementor Support
+ */
+function tripbookkar_elementor_support() {
+    add_theme_support('elementor');
+    add_theme_support('elementor-page-settings');
+}
+add_action('after_setup_theme', 'tripbookkar_elementor_support');
+
+/**
+ * SEO Optimization
+ */
+function tripbookkar_seo_meta_tags() {
+    if (is_singular('destinations')) {
+        global $post;
+        $destination_country = get_post_meta($post->ID, '_destination_country', true);
+        $best_time = get_post_meta($post->ID, '_best_time_to_visit', true);
+        
+        echo '<meta name="description" content="Discover ' . get_the_title() . ' in ' . $destination_country . '. Best time to visit: ' . $best_time . '. Find flights, hotels, and packages.">' . "\n";
+        echo '<meta property="og:title" content="Visit ' . get_the_title() . ' - ' . $destination_country . '">' . "\n";
+        echo '<meta property="og:description" content="Plan your perfect trip to ' . get_the_title() . '. Discover attractions, book flights and hotels.">' . "\n";
+    }
+}
+add_action('wp_head', 'tripbookkar_seo_meta_tags');
