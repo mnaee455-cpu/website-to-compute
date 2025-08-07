@@ -24,7 +24,7 @@ jQuery(document).ready(function($) {
 
     // Mobile Menu Toggle
     $('.menu-toggle').on('click', function() {
-        $('#site-navigation').toggleClass('active');
+        $('.main-navigation').toggleClass('active');
         $(this).toggleClass('active');
         $('body').toggleClass('menu-open');
     });
